@@ -1,0 +1,46 @@
+{% extends 'main/main.html' %}
+
+{% block body %}
+<input class="search_inp" type="text" placeholder="Пошук по імені або номеру" id="search-text" onkeyup="tableSearch()">
+
+{% for point in points %}
+    {% if user_pid != point.pid %}
+        <p><a href="{% url 'points' city_pk=point.city.id point_pk=point.pid %}">
+            №{{ point.pid }} {{ point.city }} {{ point.address }}
+            </a>
+        </p>
+    {% endif %}
+{% endfor %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Назва</th>
+      <th scope="col">Знаходження</th>
+      <th scope="col">Ціна</th>
+    </tr>
+  </thead>
+  <tbody>
+    <div id="box">
+        {% for medicine in medicines %}
+            {% if medicine not in my_medicine %}
+                <tr>
+                    <th>{{ medicine }}</th>
+                    <th>{{ city }}
+                        {% for point in points %}
+                            {% if point.pid == medicine.pid %}
+                                {{ point.address }}
+                                {{ break }}
+                            {% endif %}
+                        {% endfor %}
+                    </th>
+                    <th>{{ medicine.price }}</th>
+                </tr>
+            {% else %}
+                {{break}}
+            {% endif %}
+        {% endfor %}
+    </div>
+  </tbody>
+</table>
+
+{% endblock %}
